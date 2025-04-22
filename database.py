@@ -4,9 +4,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import time
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:Prakhar%401189@localhost/blog_recommender"
-
-
+SQLALCHEMY_DATABASE_URL = f'postgresql://postgres:prajjwal%402505@localhost/blog recommender database'
 
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
