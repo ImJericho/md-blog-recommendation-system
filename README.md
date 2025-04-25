@@ -14,21 +14,6 @@ A hybrid recommendation system for blog posts that combines multiple recommendat
 - SQLAlchemy ORM for database operations
 - Caching of similarity scores for improved performance
 
-## Project Structure
-
-```
-blog_recommender/
-├── api/
-│   └── recommendation.py    # API endpoints
-├── config/
-│   └── weights.py          # Configuration for recommendation weights
-├── models/
-│   └── database.py         # Database models and configuration
-├── services/
-│   └── recommender.py      # Core recommendation logic
-├── main.py                 # FastAPI application
-└── requirements.txt        # Project dependencies
-```
 
 ## Setup
 
@@ -55,11 +40,6 @@ uvicorn blog_recommender.main:app --reload
 ```
 
 ## API Endpoints
-
-### Process New Blog
-- **POST** `/api/v1/new-blog/{blog_id}`
-- Processes a new blog post and updates similarity scores
-- Should be called whenever a new blog is created
 
 ### Get Recommendations
 - **GET** `/api/v1/recommendations/{user_id}/{blog_id}`
