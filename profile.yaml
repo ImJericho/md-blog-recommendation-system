@@ -1,0 +1,17 @@
+# Configuration for recommendation weights
+# These weights determine the importance of each recommendation factor
+
+recommendation_weights:
+  popularity: 0.3      # Based on likes and views
+  recency: 0.2         # Based on creation date
+  content_similarity: 0.3  # Based on content similarity
+  user_similarity: 0.2  # Based on similar users' preferences
+
+# Minimum threshold for similarity scores
+similarity_threshold: 0.5
+
+# Number of similar users to consider for collaborative filtering
+similar_users_count: 5
+
+# Number of recommendations to return
+recommendation_count: 10

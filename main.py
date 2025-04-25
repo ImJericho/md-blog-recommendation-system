@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .api.recommendation import router as recommendation_router
-from .models.database import Base, engine
+from api.recommendation import router as recommendation_router
+from models.database import Base, engine
 
 # Create database tables
 Base.metadata.create_all(bind=engine)

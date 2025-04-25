@@ -1,31 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
-
+import os
+import yaml
 from ..models.database import get_db
 from ..services.recommender import RecommenderService
-from ..config.weights import RECOMMENDATION_COUNT
+
+
+# Load configuration from YAML file
+config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config", "weights.yaml")
+with open(config_path, "r") as file:
+    config = yaml.safe_load(file)
+RECOMMENDATION_COUNT = config.get("recommendation_count")
 
 router = APIRouter()
-
-@router.post("/new-blog/{blog_id}")
-async def process_new_blog(blog_id: int, db: Session = Depends(get_db)):
-    """
-    Process a new blog post and update similarity scores.
-    This endpoint should be called whenever a new blog is created.
-    """
-    try:
-        recommender = RecommenderService(db)
-        # Get all existing blogs
-        existing_blogs = db.query(Blog).filter(Blog.blog_id != blog_id).all()
-        
-        # Calculate and store similarity scores with existing blogs
-        for existing_blog in existing_blogs:
-            recommender.calculate_content_similarity(blog_id, existing_blog.blog_id)
-        
-        return {"message": "Blog processed successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/recommendations/{user_id}/{blog_id}")
 async def get_recommendations(
@@ -37,6 +25,7 @@ async def get_recommendations(
     """
     Get blog recommendations for a user based on a specific blog.
     """
+    print("Starting recommendation process...")
     try:
         recommender = RecommenderService(db)
         recommendations = recommender.get_recommendations(user_id, blog_id)
