@@ -1,15 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
-import os
 import yaml
-from ..models.database import get_db
-from ..services.recommender import RecommenderService
+from models.database import get_db
+from services.recommender import RecommenderService
 
 
 # Load configuration from YAML file
-config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config", "weights.yaml")
-with open(config_path, "r") as file:
+with open("profile.yaml", "r") as file:
     config = yaml.safe_load(file)
 RECOMMENDATION_COUNT = config.get("recommendation_count")
 
@@ -30,7 +28,6 @@ async def get_recommendations(
         recommender = RecommenderService(db)
         recommendations = recommender.get_recommendations(user_id, blog_id)
         
-        # Return top N recommendations
         return {
             "user_id": user_id,
             "blog_id": blog_id,

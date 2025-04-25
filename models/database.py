@@ -12,7 +12,7 @@ Base = declarative_base()
 # Database configuration - Using SQLite
 DATABASE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data')
 os.makedirs(DATABASE_DIR, exist_ok=True)
-DATABASE_URL = f"sqlite:///{os.path.join(DATABASE_DIR, 'blog_recommender.db')}"
+DATABASE_URL = f"sqlite:///{os.path.join('data', 'blog_recommender.db')}"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

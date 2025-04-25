@@ -2,9 +2,8 @@ from typing import List, Dict
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 import numpy as np
-import os
 import yaml
-from ..models.database import Blog, BlogMetrics, BlogSimilarity, User
+from models.database import Blog, BlogMetrics, BlogSimilarity, User
 from sentence_transformers import SentenceTransformer
 from torch.nn import functional as F
 
@@ -12,8 +11,7 @@ class RecommenderService:
     def __init__(self, db: Session):
         self.db = db
         # Load configuration from YAML file
-        config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config", "weights.yaml")
-        with open(config_path, "r") as file:
+        with open("profile.yaml", "r") as file:
             self.config = yaml.safe_load(file)
         
         # Store configuration values as instance variables
@@ -159,17 +157,15 @@ class RecommenderService:
         """Get recommendations for a user based on a specific blog"""
         # Get all blogs except the current one
         all_blogs = self.db.query(Blog).filter(Blog.blog_id != blog_id).all()
-        
+        print(self.db.query(Blog))
         # Calculate scores for each blog
         blog_scores = []
         for blog in all_blogs:
-            # Calculate individual scores
             popularity_score = self.calculate_popularity_score(blog) 
             recency_score = self.calculate_recency_score(blog)
             content_similarity_score = self.calculate_content_similarity(blog_id, blog.blog_id)
             # user_similarity_score = self.calculate_user_similarity(user_id, blog.blog_id)
     
-            # Calculate weighted final score
             final_score = (
                 self.recommendation_weights['popularity'] * popularity_score +
                 self.recommendation_weights['recency'] * recency_score +
@@ -179,6 +175,6 @@ class RecommenderService:
             
             blog_scores.append((blog.blog_id, final_score))
         
-        # Sort by final score and return blog IDs
         blog_scores.sort(key=lambda x: x[1], reverse=True)
         return [blog_id for blog_id, _ in blog_scores]
+        

@@ -1,8 +1,7 @@
 import csv
 from datetime import datetime
 import json
-from sqlalchemy.orm import Session
-from ..models.database import Blog, BlogMetrics, SessionLocal, engine
+from models.database import Blog, BlogMetrics, SessionLocal, engine
 
 def import_cleaned_blogs(cleaned_blogs_file: str):
     """Import cleaned blogs data into the database from a CSV file"""

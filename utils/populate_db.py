@@ -2,7 +2,7 @@ import json
 import random
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-from ..models.database import Base, engine, User, Blog, BlogMetrics, BlogSimilarity, user_history, SessionLocal
+from models.database import Base, engine, User, Blog, BlogMetrics, BlogSimilarity, user_history, SessionLocal
 
 def create_sample_users(db: Session, count: int = 10):
     """Create sample users with different streams and classes"""
