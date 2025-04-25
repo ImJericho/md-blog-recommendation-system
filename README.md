@@ -1,20 +1,5 @@
 # Blog Recommendation System
 
-A hybrid recommendation system for blog posts that combines multiple recommendation strategies to provide personalized content suggestions.
-
-## Features
-
-- Hybrid recommendation system combining:
-  - Popularity-based recommendations (likes and views)
-  - Recency-based recommendations (creation date)
-  - Content-based recommendations (similarity between blog content)   
-  - Collaborative filtering (user behavior patterns)
-- Configurable weights for different recommendation factors
-- FastAPI-based REST API
-- SQLAlchemy ORM for database operations
-- Caching of similarity scores for improved performance
-
-
 ## Setup
 
 1. Create a virtual environment:
@@ -48,7 +33,7 @@ uvicorn blog_recommender.main:app --reload
 
 ## Configuration
 
-The recommendation weights can be adjusted in `config/weights.py`:
+The recommendation weights can be adjusted in `profile.yaml`:
 - `popularity`: Weight for popularity-based recommendations
 - `recency`: Weight for recency-based recommendations
 - `content_similarity`: Weight for content-based recommendations
