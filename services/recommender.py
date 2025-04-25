@@ -16,7 +16,6 @@ class RecommenderService:
         
         # Store configuration values as instance variables
         self.recommendation_weights = self.config["recommendation_weights"]
-        self.similarity_threshold = self.config["similarity_threshold"]
         self.similar_users_count = self.config["similar_users_count"]
 
     def calculate_popularity_score(self, blog: Blog) -> float:
@@ -46,8 +45,13 @@ class RecommenderService:
         
         days_old = (now - blog.creation_date).days
         
-        # Score decreases exponentially with age
-        return np.exp(-days_old / 30)  # 30 days half-life
+        # Score decreases quadratically with age
+        max_days = 90  # After 90 days, score approaches zero
+        if days_old >= max_days:
+            return 0.0
+        
+        # Quadratic decay: score = 1 - (days_old/max_days)²
+        return 1.0 - (days_old / max_days) ** 2
 
     def calculate_content_similarity(self, blog_id: int, other_blog_id: int) -> float:
         """Calculate content similarity between two blogs using sentence embeddings"""
@@ -165,7 +169,7 @@ class RecommenderService:
             recency_score = self.calculate_recency_score(blog)
             content_similarity_score = self.calculate_content_similarity(blog_id, blog.blog_id)
             # user_similarity_score = self.calculate_user_similarity(user_id, blog.blog_id)
-    
+
             final_score = (
                 self.recommendation_weights['popularity'] * popularity_score +
                 self.recommendation_weights['recency'] * recency_score +

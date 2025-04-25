@@ -7,9 +7,6 @@ recommendation_weights:
   content_similarity: 0.3  # Based on content similarity
   user_similarity: 0.2  # Based on similar users' preferences
 
-# Minimum threshold for similarity scores
-similarity_threshold: 0.5
-
 # Number of similar users to consider for collaborative filtering
 similar_users_count: 5
 
