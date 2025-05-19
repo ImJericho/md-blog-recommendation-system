@@ -22,6 +22,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+print("Starting FastAPI application...")
+
 # Include routers
 app.include_router(recommendation_router, prefix="/api/v1", tags=["recommendations"])
 

@@ -16,7 +16,6 @@ class RecommenderService:
         
         # Store configuration values as instance variables
         self.recommendation_weights = self.config["recommendation_weights"]
-        self.similar_users_count = self.config["similar_users_count"]
 
     def calculate_popularity_score(self, blog: Blog) -> float:
         """Calculate popularity score based on likes and views"""
@@ -109,57 +108,10 @@ class RecommenderService:
         
         return similarity_score
 
-    # def find_similar_users(self, user_id: int) -> List[int]:
-    #     """Find users with similar reading patterns"""
-    #     current_user = self.db.query(User).filter(User.user_id == user_id).first()
-    #     if not current_user:
-    #         return []
-        
-    #     # Get all users and their read blogs
-    #     all_users = self.db.query(User).all()
-    #     user_similarities = []
-        
-    #     for user in all_users:
-    #         if user.user_id == user_id:
-    #             continue
-                
-    #         # Calculate Jaccard similarity between read blogs
-    #         current_blogs = set(b.blog_id for b in current_user.read_history)
-    #         other_blogs = set(b.blog_id for b in user.read_history)
-            
-    #         if not current_blogs or not other_blogs:
-    #             continue
-                
-    #         intersection = len(current_blogs & other_blogs)
-    #         union = len(current_blogs | other_blogs)
-    #         similarity = intersection / union if union > 0 else 0
-            
-    #         user_similarities.append((user.user_id, similarity))
-        
-    #     # Sort by similarity and return top N users
-    #     user_similarities.sort(key=lambda x: x[1], reverse=True)
-    #     return [user_id for user_id, _ in user_similarities[:self.similar_users_count]]
-
-    # def calculate_user_similarity(self, user_id: int, other_user_id: int) -> float:
-    #     # Find similar users and their preferences
-    #     similar_users = self.find_similar_users(user_id)
-    #     user_similarity_score = 0.0
-    #     if similar_users:
-    #         # Calculate average preference of similar users
-    #         similar_user_preferences = []
-    #         for similar_user_id in similar_users:
-    #             similar_user = self.db.query(User).filter(User.user_id == similar_user_id).first()
-    #             if similar_user and blog in similar_user.read_history:
-    #                 similar_user_preferences.append(1.0)
-    #             else:
-    #                 similar_user_preferences.append(0.0)
-    #         user_similarity_score = sum(similar_user_preferences) / len(similar_user_preferences)
-
-    #     return user_similarity_score
-
-    def get_recommendations(self, user_id: int, blog_id: int) -> List[int]:
-        """Get recommendations for a user based on a specific blog"""
+    def get_recommendations(self, blog_id: int) -> List[int]:
         # Get all blogs except the current one
+
+        print("Fetching all blogs except the current one...")
         all_blogs = self.db.query(Blog).filter(Blog.blog_id != blog_id).all()
         print(self.db.query(Blog))
         # Calculate scores for each blog
@@ -168,13 +120,11 @@ class RecommenderService:
             popularity_score = self.calculate_popularity_score(blog) 
             recency_score = self.calculate_recency_score(blog)
             content_similarity_score = self.calculate_content_similarity(blog_id, blog.blog_id)
-            # user_similarity_score = self.calculate_user_similarity(user_id, blog.blog_id)
 
             final_score = (
                 self.recommendation_weights['popularity'] * popularity_score +
                 self.recommendation_weights['recency'] * recency_score +
                 self.recommendation_weights['content_similarity'] * content_similarity_score
-                # self.recommendation_weights['user_similarity'] * user_similarity_score
             )
             
             blog_scores.append((blog.blog_id, final_score))
