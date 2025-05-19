@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 import numpy as np
 import yaml
-from models.database import Blog, BlogMetrics, BlogSimilarity, User
+from models.database import Blog, BlogMetrics, BlogSimilarity
 from sentence_transformers import SentenceTransformer
 from torch.nn import functional as F
 

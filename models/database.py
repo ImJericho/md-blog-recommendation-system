@@ -20,41 +20,14 @@ def get_db():
     finally:
         db.close()
 
-# Association table for user history
-user_history = Table(
-    'user_history',
-    Base.metadata,
-    Column('user_id', Integer, ForeignKey('users.user_id')),
-    Column('blog_id', Integer, ForeignKey('blogs.blog_id')),
-    Column('read_at', DateTime, default=datetime.utcnow)
-)
-
-class User(Base):
-    __tablename__ = 'users'
-    
-    user_id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-    stream = Column(String(50), nullable=False)
-    class_name = Column(String(50), nullable=False)
-    
-    # Relationship with history
-    read_history = relationship("Blog", secondary=user_history, back_populates="readers")
-
 class Blog(Base):
     __tablename__ = 'blogs'
     
     blog_id = Column(Integer, primary_key=True)
     title = Column(String(200), nullable=False)
     content = Column(String, nullable=False)
-    tags = Column(JSON, nullable=False)
-    exams = Column(JSON, nullable=False)
-    read_time = Column(Integer, nullable=False)
-    conclusion = Column(String, nullable=False)
     creation_date = Column(DateTime, default=datetime.utcnow)
-    
-    # Relationship with history
-    readers = relationship("User", secondary=user_history, back_populates="read_history")
-    
+        
     # Relationship with dynamic metrics
     metrics = relationship("BlogMetrics", back_populates="blog", uselist=False)
 
