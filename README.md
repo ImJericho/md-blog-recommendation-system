@@ -14,7 +14,7 @@ poetry install
 
 2. Create a virtual environment:
 ```bash
-poetry shell  # On Windows: venv\Scripts\activate
+poetry shell
 ```
 
 3. Run the application:
